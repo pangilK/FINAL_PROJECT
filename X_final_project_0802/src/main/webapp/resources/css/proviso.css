@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+div {
+    position: relative;
+    border: none;
+}
+
+#provisoBox, #flashLightBox{
+	font-family: 'Heiro';
+	color: black;
+    text-shadow: -1px 0px white, 0px 1px white, 1px 0px white, 0px -1px white;
+	margin: 100px auto auto;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.527), rgba(0, 0, 0, 0.5)),
+	url('/resources/img/proviso.png');
+	background-size:cover;
+	width : 70%;
+	height : 750px;
+	border:3px solid #e5d5d554;
+	border-radius : 10px;
+	display: flex;
+    flex-direction: column;
+}
+
+#flashLightBox{
+	font-family: 'Heiro';
+	color: black;
+    text-shadow: -1px 0px white, 0px 1px white, 1px 0px white, 0px -1px white;
+	margin: 100px auto auto;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.527), rgba(0, 0, 0, 0.5)),
+	url('/resources/img/proviso.png');
+	background-size:cover;
+	width : 70%;
+	height : 750px;
+	border:3px solid #e5d5d554;
+	border-radius : 10px;
+	/* filter: brightness(0); */
+    font-size: 2vh;
+	display : none;
+}
+#p_itemBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top : 60px;
+}
+
+#p_item1 , #p_item2 {
+	background : #ffffff7d;
+	border: 3px solid #00000047;
+    width: 300px;
+    height: 300px;
+    margin: 50px;
+}
+
+#p_item1_img , #p_item2_img {
+	width: 300px;
+	max-height: 300px;
+}
+
+
+#p_btnBox{
+	margin:auto;
+}
+
+#useBtn {
+	font-family: 'Heiro';
+    cursor: pointer;
+    color: black;
+    text-shadow: -1px 0px white, 0px 1px white, 1px 0px white, 0px -1px white;
+    background: #ffffff57;
+    border: 2px solid #e5d5d554;
+    width:150px;
+    height: 60px;
+    font-size: 40px;
+    border-radius: 5px;
+    text-align: center;
+    padding-right: 2px;
+}
+
+#provisoIntro{
+	width:345px;
+    height: 60px;
+	font-size : 30px;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: -5%;
+}
+
+#keyAndBox,#lampAndPaper,#itemUseFailed{
+	display:none;
+	transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    border: 2px solid #e5d5d554;
+    z-index: 1;
+    cursor: pointer;
+    text-align: center;
+    width:500px;
+    font-size:30px;
+    background: #ffffff57;
+}
+
+#flashlight {
+	--Xpos:50vw;
+	--Ypos:50vh;
+}
+
+#flashlight:before {
+	border-radius:10px;
+	content: "";
+	display: block;
+	width: 100%;
+	height:750px;
+	position: absolute;
+ 	pointer-events: none;
+	background: radial-gradient(
+    	circle 9em at var(--Xpos) var(--Ypos),
+    	rgba(0, 0, 0, 0),
+   	    rgba(0, 0, 0, 1)
+    );
+}
