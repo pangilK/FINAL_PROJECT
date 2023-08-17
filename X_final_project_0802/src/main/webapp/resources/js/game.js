@@ -181,7 +181,7 @@ function createAction(sceneObject) {
 
 	let gameType = "";
 	if(action == 'GAME' || action == 'ALLGAME'){
-		gameType = sceneObject.options[selNum].subGame.gameType;
+		gameType = sceneObject.options[selNum].gameType;
 	}
 	sys_isEnter = false;
 
@@ -319,6 +319,19 @@ function findEnding() {
 		document.querySelector("#btnDiv").style.display = "block";
 	}
 }
+
+function provisoEnding() {
+	subGameBox.style.dispaly = "none";
+	document.querySelector("#docBtn").style.display = 'block';
+	document.querySelector("#letterBtn").style.display = 'block';
+
+	document.querySelector("#sub_game").remove();
+	gameBox.style.display = "block";
+	scene++;
+	const sceneObject = window["scene"+scene];
+	displayText(sceneObject);
+}
+
 
 function lineCheck(line) {
 	if(line.startsWith("마이크:") || line.startsWith("레베카:") || line.startsWith("카렌:") || 

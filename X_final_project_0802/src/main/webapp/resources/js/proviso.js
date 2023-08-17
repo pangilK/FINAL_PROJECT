@@ -1,5 +1,6 @@
-let sucLampAndPaper = false;
-let	sucKeyAndBox = false;
+let checkFlashlight = false;
+let checkLetter = false;
+let checkDoc = false;
 
 function handleDragOver(event) {
     event.preventDefault();
@@ -49,7 +50,7 @@ function itemUse() {
     if(isBoxAndKey){
     	document.getElementById("p_item1_img").src = '';
     	document.getElementById("p_item2_img").src = '';
-      	document.querySelector('#inv6').style.width = '105px';
+      	document.querySelector('#inv6').style.width = '82px';
         $('#keyAndBox').fadeToggle(200);
     }
 
@@ -81,6 +82,15 @@ function itemUseFailed() {
 function p_click(divId) {
 	document.querySelector('#'+divId).style.display = 'none';
 }
+
+function closeProviso() {
+    if(checkDoc && checkFlashlight && checkLetter){
+        $('#p_closeTrue').toggle(200);
+    }else{
+        $('#p_closeFalse').fadeToggle(200);
+    }
+}
+
 
 // flashLight --------------------------------------------------------
 function flashlightStart() {
@@ -128,6 +138,8 @@ function closeFlashlight() {
 }
 
 function flashLightEnd() {
+    checkFlashlight = true;
+    closeFlashlight();
     document.querySelector("#itemBox").style.display = 'block';
     document.querySelector("#provisoBox").style.display = 'flex';
     document.querySelector("#flashLightBox").style.display = 'none';
@@ -146,6 +158,8 @@ function closeLetter() {
 }
 
 function letterEnd() {
+    checkLetter = true;
+    closeLetter();
     document.querySelector("#itemBox").style.display = 'block';
     document.querySelector("#provisoBox").style.display = 'flex';
     document.querySelector("#p_letterBox").style.display = 'none';
@@ -158,10 +172,22 @@ function letterEnd() {
 function openDoc() {
     document.querySelector("#itemBox").style.display = 'none';
     document.querySelector("#provisoBox").style.display = 'none';
-    document.querySelector("#p_docBox").style.display = 'flex';
+    document.querySelector("#p_docBox").style.display = 'block';
 }
 
 function closeDoc() {
     $('#closeText_doc').fadeToggle(200);
 }
+
+function docEnd() {
+    checkDoc = true;
+    closeDoc();
+    document.querySelector("#itemBox").style.display = 'block';
+    document.querySelector("#provisoBox").style.display = 'flex';
+    document.querySelector("#p_docBox").style.display = 'none';
+}
 // end DOC ----------------------------------------------------------
+
+function provisoEnd() {
+    provisoEnding();
+}

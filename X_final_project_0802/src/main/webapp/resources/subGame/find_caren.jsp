@@ -22,7 +22,7 @@
             </div>
             <div id="closeTrue">
             	단서를 모두 다 찾았다 다시 돌아가자.
-            	<button onclick="findEnd();">돌아간다</button>
+            	<div onclick="findEnd();">돌아간다</div>
             </div>
             <div id="closeFalse" onclick="falsedel();">
             	아직 찾아야 할 단서가 남았다. <br/> 계속 찾아보자.

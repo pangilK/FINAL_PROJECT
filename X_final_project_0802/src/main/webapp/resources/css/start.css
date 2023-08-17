@@ -193,7 +193,7 @@ body{
 .items img {
     margin-left: 11px;
     cursor: pointer;
-    width: 82px;
+    width: 0px;
     height: 70px;
 }
 
