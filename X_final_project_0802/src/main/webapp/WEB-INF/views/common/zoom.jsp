@@ -24,12 +24,12 @@
 		<div id="letterBox">
 			<img id="letter" src="/resources/subGame/image/letter.png" />
 			<div id="letterText">편지다. <br/>보아하니 그렇게 오래된거 같진 않다.</div>
-			<button id="letterBtn"> 열어볼까 ? </button>
+			<button id="letterBtn" onclick="openLetter();"> 열어볼까 ? </button>
 		</div>
 		<div id="docBox">
 			<img id="doc" src="/resources/subGame/image/doc.png"/>
 			<div id="docText">상자를 열었더니 나온 서류이다.</div>
-			<button id="docBtn"> 열어볼까 ? </button>
+			<button id="docBtn" onclick="openDoc();"> 열어볼까 ? </button>
 		</div>
 	</div>
 <!-- end zoom box  -->

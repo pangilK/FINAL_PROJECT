@@ -82,9 +82,12 @@ function p_click(divId) {
 	document.querySelector('#'+divId).style.display = 'none';
 }
 
+// flashLight --------------------------------------------------------
 function flashlightStart() {
+    document.querySelector("#itemBox").style.display = 'none';
+	document.querySelector("#lampAndPaper").style.display = 'none';
     document.querySelector("#provisoBox").style.display = 'none';
-    document.querySelector("#flashLightBox").style.display = 'flex';
+    document.querySelector("#flashLightBox").style.display = 'block';
     flashlight();
 }
 
@@ -119,3 +122,46 @@ function flashlight(){
        flashlight.style.setProperty("--Ypos", mouseY-100 + "px");
     }	
 }
+
+function closeFlashlight() {
+    $('#closeText_flash').fadeToggle(200);
+}
+
+function flashLightEnd() {
+    document.querySelector("#itemBox").style.display = 'block';
+    document.querySelector("#provisoBox").style.display = 'flex';
+    document.querySelector("#flashLightBox").style.display = 'none';
+}
+// end flashLight --------------------------------------------------------
+
+// Letter -----------------------------------------------------------
+function openLetter() {
+    document.querySelector("#itemBox").style.display = 'none';
+    document.querySelector("#provisoBox").style.display = 'none';
+    document.querySelector("#p_letterBox").style.display = 'block';
+}
+
+function closeLetter() {
+    $('#closeText_letter').fadeToggle(200);
+}
+
+function letterEnd() {
+    document.querySelector("#itemBox").style.display = 'block';
+    document.querySelector("#provisoBox").style.display = 'flex';
+    document.querySelector("#p_letterBox").style.display = 'none';
+}
+
+// end Letter --------------------------------------------------------
+
+
+// DOC ---------------------------------------------------------------
+function openDoc() {
+    document.querySelector("#itemBox").style.display = 'none';
+    document.querySelector("#provisoBox").style.display = 'none';
+    document.querySelector("#p_docBox").style.display = 'flex';
+}
+
+function closeDoc() {
+    $('#closeText_doc').fadeToggle(200);
+}
+// end DOC ----------------------------------------------------------
