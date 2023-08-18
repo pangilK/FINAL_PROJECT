@@ -5,10 +5,9 @@ const subGameBox = document.querySelector("#subGameBox");
 const systemZoomText = document.querySelector("#systemZoomText");
 const systemZoomTextBox = document.querySelector("#systemZoomTextBox");
 
-
 let idx = 0;
 // scene을 구분하는것 ex : 'scene'+scene = scene1; default = 1
-let scene = 5; 
+let scene = 4; 
 // 현재 option을 뭘 골랐는지 구분할 변수
 let selNum = 0;
 // action중 ALL -> 다보고 넘어가기 위한 변수
@@ -69,6 +68,9 @@ function displayText(sceneObject) {
 				systemZoomTextBox.textContent += char;
 			}else{
 				paragraph.textContent += char;
+				if(i == line.length -1){
+					paragraph.textContent += " ▼";
+				}
 			}
 
 			i++;
@@ -137,6 +139,7 @@ function createOptions(sceneObject) {
 		});
 	}
 	// GAME = 아직 구현은 안했는데 단 한개의 게임만 가지고 있을때 쓸꺼같음 - 0816 지금구현중
+	// 0817 구현완료
 	if (action == 'GAME') {
 		option.forEach((optionObj, index) => {
 			const optionButton = document.createElement("button");
@@ -256,6 +259,9 @@ function createAction(sceneObject) {
 					systemZoomTextBox.textContent += char;
 				}else{
 					paragraph.textContent += char;
+					if(i == line.length-1){
+						paragraph.textContent += " ▼";
+					}
 				}
 
 				i++;
@@ -281,49 +287,51 @@ function playSound(sound) {
 
 // ajax 통신으로 jsp파일 불러와서 subGameBox 안에 생성
 function createGame(subGame) {
+	loadingStart();
 	const sub_game = document.createElement("div");
-	sub_game.setAttribute("id","sub_game");
-	
 	const link = '/resources/subGame/' + subGame + '.jsp';
-	var xhr = new XMLHttpRequest();
-    xhr.open('GET', link, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            sub_game.innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send();
+	sub_game.setAttribute("id","sub_game");
+	gameBox.style.display = "none";
+	
 	if(subGame == 'proviso'){
 		document.querySelector("#docBtn").style.display = 'block';
 		document.querySelector("#letterBtn").style.display = 'block';
 	}
-	gameBox.style.display = "none";
-	subGameBox.style.display = "block";
-	subGameBox.appendChild(sub_game);
+
+	setTimeout(function() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', link, true);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				loadingEnd();
+				sub_game.innerHTML = xhr.responseText;
+			}
+    	};
+		xhr.send();
+		subGameBox.style.display = "block";
+		subGameBox.appendChild(sub_game);
+	}, 1500); 
 }
 
 // subGame중 단서 찾기가 하나씩 끝날때마다 실행하는중
 function findEnding() {
-	subGameBox.style.display = "none";
+subGameBox.style.display = "none";
 	
 	document.querySelector("#sub_game").remove();
 	gameBox.style.display = "block";
-	if (subGameCount == 3) {
-		scene++;
-		const sceneObject = window["scene"+scene];
-		displayText(sceneObject);
-	} else {
-		sys_isEnter = true;
-		isAction = true;
-		isSys = false;
-		document.querySelector("#btnDiv").style.display = "block";
-	}
+	
+	sys_isEnter = true;
+	isAction = false;
+	isSys = true;
+	scene++;
+	const sceneObject = window["scene"+scene];
+	displayText(sceneObject);
 }
 
 function provisoEnding() {
 	subGameBox.style.dispaly = "none";
-	document.querySelector("#docBtn").style.display = 'block';
-	document.querySelector("#letterBtn").style.display = 'block';
+	document.querySelector("#docBtn").style.display = 'none';
+	document.querySelector("#letterBtn").style.display = 'none';
 
 	document.querySelector("#sub_game").remove();
 	gameBox.style.display = "block";
@@ -335,7 +343,7 @@ function provisoEnding() {
 
 function lineCheck(line) {
 	if(line.startsWith("마이크:") || line.startsWith("레베카:") || line.startsWith("카렌:") || 
-	   line.startsWith("알렉스:") || line.startsWith("에밀리:")){
+	   line.startsWith("빅토르:") || line.startsWith("에밀리:")){
 		changeImage(line);
 		return true;
 	}
@@ -350,7 +358,7 @@ function changeImage(line){
         profile.style.backgroundImage = "url('/resources/img/mike.png')";
     } else if (line.startsWith("레베카:")) {
         profile.style.backgroundImage = "url('/resources/img/rebecca.png')";
-    } else if (line.startsWith("알렉스:")) {
+    } else if (line.startsWith("빅토르:")) {
         profile.style.backgroundImage = "url('/resources/img/alex.png')";
     } else if (line.startsWith("카렌:")) {
         profile.style.backgroundImage = "url('/resources/img/caren.png')";

@@ -7,7 +7,7 @@ function nickCheck(){
   	document.querySelector("#gameBox").style.display = 'block';
   	document.querySelector("#itemBox").style.display = 'block';
 	  document.querySelector("#start_1").remove();
-	  displayText(scene4);
+	  displayText(scene1);
   }else{
 	  alert('닉네임을 다시 확인해주시기 바랍니다.');
   }

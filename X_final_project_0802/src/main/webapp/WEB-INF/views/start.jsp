@@ -26,6 +26,7 @@
 	</div>
 	<jsp:include page="./common/zoom.jsp" />
 	<jsp:include page="./common/item.jsp" />
+	<jsp:include page="./common/load.jsp" />	
 	<div id="gameBox">
 		<div id="textBox">
 			<div id="systemText"></div> 

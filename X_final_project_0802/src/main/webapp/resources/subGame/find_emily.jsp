@@ -5,12 +5,13 @@
 <link rel="stylesheet" href="/resources/css/find.css">
 <style>
 	#back {
-    	width: 2140px;
-   		height: 1320px;
-    	margin-left: -535px;
-    	margin-top: -330px;
-    	background: url('/resources/subGame/image/emily_office.jpg');
-    	background-size : cover;
+	    width: 2140px;
+	   	height: 1320px;
+	    margin-left: -535px;
+	    margin-top: -330px;
+	    user-select: none;
+		background: url('/resources/subGame/image/emily_office.jpg');
+	    background-size : cover;
 	}
 </style>
 <section>

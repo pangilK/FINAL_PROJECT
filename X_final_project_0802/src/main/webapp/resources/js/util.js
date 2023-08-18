@@ -14,10 +14,23 @@ function zoomClick() {
 
 // 시스템에 찍힐때 대사 닉네임 이미지 다 없애는 함수
 function clean() {
+    if(document.querySelector("#systemText").lastChild != null){
+        let lastPtag = document.querySelector("#systemText").lastChild.textContent;
+        if(lastPtag.substring(lastPtag.length-1,lastPtag.length) == '▼'){
+            document.querySelector("#systemText").lastChild.textContent = 
+                lastPtag.substring(0,lastPtag.length-1); 
+        }   
+    }
     document.querySelector("#systemZoomTextBox").textContent = "";
     document.querySelector("#char_Nick").innerHTML = "";
     const profile = document.querySelector("#char_Image");
     profile.style.backgroundImage = '';
 }
 
+function loadingStart() {
+   document.querySelector("#loading").style.display = 'block';
+}
 
+function loadingEnd() {
+    document.querySelector("#loading").style.display = 'none';
+}

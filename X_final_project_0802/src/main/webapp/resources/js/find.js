@@ -326,7 +326,7 @@ function key() {
     $('#spcKey').show(0);
     keyItem();
     $('#inv1').animate({
-        width: 105
+        width: 81
     }, 0);
     isKey = true;
 }
@@ -348,7 +348,7 @@ function box() {
     $('#spcBox').show(0);
     boxItem();
     $('#inv2').animate({
-        width: 105
+        width: 81
     }, 0);
     isBox = true;
 }
@@ -372,7 +372,7 @@ function paper() {
     $('#spcPaper').show(0);
     paperItem();
     $('#inv3').animate({
-        width: 105
+        width: 81
     }, 0);
     isPaper = true;
 }
@@ -396,7 +396,7 @@ function lamp() {
     $('#spcLamp').show(0);
     lampItem();
     $('#inv4').animate({
-        width: 105
+        width: 81
     }, 0);
     isLamp = true;
 }
@@ -418,7 +418,7 @@ function letter() {
     $('#spcLetter').show(0);
     letterItem();
     $('#inv5').animate({
-        width: 105
+        width: 81
     }, 0);
     isLetter = true;
 }
