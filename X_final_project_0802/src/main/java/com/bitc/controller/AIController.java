@@ -18,17 +18,16 @@ public class AIController {
 	
 	@Autowired
 	public AIController(ChatGptService chatGptService) {
-	    this.gpt = chatGptService;
+	    	this.gpt = chatGptService;
 	}
 	 
 	@PostMapping("/chat")
 	public String generateChatText(@RequestBody ChatRequest chatRequest) {
-		System.out.println("여긴왔니 ?");
-        String prompt = chatRequest.getPrompt();
-        float temperature = chatRequest.getTemperature();
-        int maxTokens = chatRequest.getMaxTokens();	
-        String text = gpt.generateText(prompt, temperature, maxTokens);
-        System.out.println(text);
-        return gpt.generateText(prompt, temperature, maxTokens);
+		String prompt = chatRequest.getPrompt();
+	        float temperature = chatRequest.getTemperature();
+	        int maxTokens = chatRequest.getMaxTokens();	
+	        String text = gpt.generateText(prompt, temperature, maxTokens);
+	        System.out.println(text);
+	        return gpt.generateText(prompt, temperature, maxTokens);
 	}
 }
