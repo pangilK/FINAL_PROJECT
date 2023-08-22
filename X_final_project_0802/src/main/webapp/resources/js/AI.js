@@ -1,5 +1,5 @@
 
-const apiKey = "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";
+const apiKey = "님꺼 쓰세요";
 const ENDPOINT = "https://api.openai.com/v1/chat/completions";
 
 function generateText(prompt, temperature, maxTokens) {
@@ -13,7 +13,7 @@ function generateText(prompt, temperature, maxTokens) {
 	        
 	        messages: [
 	          { role: "user", content: prompt },
-	          { role: "system", content: "You are a game master."}
+	          { role: "system", content: "You are a game master."} // AI의 역할 정해주기
 	        ],
 	        
 	        temperature: temperature,
