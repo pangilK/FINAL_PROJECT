@@ -7,6 +7,10 @@
 		<!-- <input type="hidden" value="${MemberVO.id}" /> -->
 		<button type="submit">GAME START</button>
 	</form>
+	<form action="game/game" method="post">
+		<!-- <input type="hidden" value="${MemberVO.id}" /> -->
+		<button type="submit">THRES.JS</button>
+	</form>
 	<%-- <jsp:include page="/resources/subGame/find.jsp"></jsp:include> --%>
 </body>
 <jsp:include page="./common/footer.jsp" />
