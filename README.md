@@ -49,4 +49,4 @@
  
  # 해야할것
  - JS 모듈화 , runWigoAndEmily 게임 구현 <br>
- - runWigoAndEmily 배경 만들기 , 뒷면 도트작업
+ - runWigoAndEmily 맵 만들기
