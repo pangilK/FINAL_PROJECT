@@ -51,4 +51,3 @@
  
  # 해야할것
  - JS 모듈화 , runWigoAndEmily 게임 구현 <br>
- - runWigoAndEmily 맵 만들기
