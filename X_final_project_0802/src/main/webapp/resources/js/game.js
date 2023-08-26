@@ -1,3 +1,4 @@
+
 const systemText = document.querySelector("#systemText");
 const gameBox = document.querySelector("#gameBox");
 const gameBtn = document.querySelector("#gameBtn");
@@ -6,8 +7,9 @@ const systemZoomText = document.querySelector("#systemZoomText");
 const systemZoomTextBox = document.querySelector("#systemZoomTextBox");
 
 let idx = 0;
+let context;
 // scene을 구분하는것 ex : 'scene'+scene = scene1; default = 1
-let scene = 4; 
+let scene = 1; 
 // 현재 option을 뭘 골랐는지 구분할 변수
 let selNum = 0;
 // action중 ALL -> 다보고 넘어가기 위한 변수
@@ -19,10 +21,7 @@ let subGameCount = 0;
 let sys_isEnter = true;
 let isSys = true;
 let isAction = false;
-// 아직사용은안함
-let endCheck1 = false;
-let endCheck2 = false;
-let endCheck3 = false;
+
 
 // introText 타이핑 작업 후 createOptions 함수
 function displayText(sceneObject) {
@@ -305,6 +304,11 @@ function createGame(subGame) {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				loadingEnd();
 				sub_game.innerHTML = xhr.responseText;
+				if(subGame == 'runWigoAndEmily'){
+					canvas = document.querySelector("#gameCanvas");
+					context = canvas.getContext("2d");
+					gameLoop();
+				}
 			}
     	};
 		xhr.send();
@@ -315,11 +319,9 @@ function createGame(subGame) {
 
 // subGame중 단서 찾기가 하나씩 끝날때마다 실행하는중
 function findEnding() {
-subGameBox.style.display = "none";
-	
+	subGameBox.style.display = "none";
 	document.querySelector("#sub_game").remove();
 	gameBox.style.display = "block";
-	
 	sys_isEnter = true;
 	isAction = false;
 	isSys = true;
@@ -328,11 +330,11 @@ subGameBox.style.display = "none";
 	displayText(sceneObject);
 }
 
+// subGame중 단서 다 찾은 후 조합 
 function provisoEnding() {
 	subGameBox.style.dispaly = "none";
 	document.querySelector("#docBtn").style.display = 'none';
 	document.querySelector("#letterBtn").style.display = 'none';
-
 	document.querySelector("#sub_game").remove();
 	gameBox.style.display = "block";
 	scene++;
