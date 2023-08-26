@@ -1,5 +1,8 @@
-const canvas = document.getElementById("gameCanvas");
-const context = canvas.getContext("2d");
+// const canvas = document.getElementById("gameCanvas");
+// const context = canvas.getContext("2d");
+const canvasWidth = 960; // 캔버스 너비
+const canvasHeight = 512; // 캔버스 높이
+
 
 class Sprite {
   constructor({ position, velocity, image }) {
@@ -35,6 +38,22 @@ const prontPlayerImage = [
   "/resources/img/game/myke/pront4.png"
 ]
 
+const backPlayerImage = [
+  "/resources/img/game/myke/back0.png",
+  "/resources/img/game/myke/back1.png",
+  "/resources/img/game/myke/back2.png",
+  "/resources/img/game/myke/back3.png",
+  "/resources/img/game/myke/back4.png"
+]
+
+const collisionObjects = collisionData.objects.map((obj) => ({
+  x: obj.x,
+  y: obj.y,
+  width: obj.width,
+  height: obj.height,
+}));
+
+
 const bgImg = new Image();
 bgImg.src = "/resources/map/testBack.png";
 
@@ -43,127 +62,97 @@ playerImage.src = "/resources/img/game/myke/pront0.png";
 
 const background = new Sprite({
   position: {
-    x: -70,
+    x: 90,
     y: -120
   },
   image: bgImg
 });
-
-
-
 
 let playerImageIndex = 0;
 let imageChangeDelay = 0;
 
 const enemyImage = new Image();
 enemyImage.src = "/resources/img/alex.png";
-// max Height : -1022 , max width : 920
-const player = { x: 70, y: 120, speed: 10, width: 48, height: 48 };
+const player = { x: canvasWidth/2, y: canvasHeight/2, speed: 10, width: 48, height: 48 };
 let enemy = { x: 3000, y: 120, speed: 15, width: 40, height: 40 };
 
 
 function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  // 전체 이미지의 원본 크기
-  const originalImageWidth = 2880; // 이미지의 원본 너비
-  const originalImageHeight = 1556; // 이미지의 원본 높이
-
-  // 캔버스 크기
-  const canvasWidth = 960; // 캔버스 너비
-  const canvasHeight = 512; // 캔버스 높이
   
-  // 캐릭터의 위치 (예시)
-  const playerX = player.x; // 캐릭터의 X 좌표
-  const playerY = player.y; // 캐릭터의 Y 좌표
- 
-	
   // 배경 그리기
   background.draw();
+
   // 플레이어 그리기
-  context.drawImage(playerImage, player.x, player.y, player.width, player.height);
-
-  // 적 그리기
-  // context.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
-    console.log("bgX :", background.position.x, "bgY :", background.position.y);
-    console.log("playerX : ", playerX, "playerY : ", playerY);
-
+  context.drawImage(playerImage , player.x , player.y , player.width , player.height);
 
   // 플레이어 움직임 처리
-  // 위
-  if (keys.ArrowUp && player.y > 0 && background.position.y < 0) {
+  
+  // 오른쪽
+  if (keys.ArrowRight) {
+    const isCol = checkCollision(player, collisionObjects,'right');
+    if (!isCol) background.position.x = background.position.x - player.speed;
+    imageChange(rightPlayerImage);
+  }
+  
+  // 왼쪽
+  if (keys.ArrowLeft) {
+    const isCol = checkCollision(player, collisionObjects,'left');
+    if (!isCol) background.position.x = background.position.x + player.speed;
+    imageChange(leftPlayerImage);
+  }
 
-    if (background.position.y <= -1020) background.position.y += 10;
-    
-    player.y -= player.speed;
-    imageChange(prontPlayerImage);
-    
-  } else if (keys.ArrowUp && player.y <= 0 && background.position.y < 0) {
-    imageChange(prontPlayerImage);
-    background.position.y = background.position.y + player.speed;
+  // 위
+  if (keys.ArrowUp) {
+    const isCol = checkCollision(player, collisionObjects,'up');
+    if (!isCol) background.position.y = background.position.y + player.speed;
+    imageChange(backPlayerImage);
   }
 
   // 아래
-  if (keys.ArrowDown && player.y + player.height < canvas.height && background.position.y > -1020 && background.position.y <= 0) {
-    
-    if (background.position.y >= 0) background.position.y -= 10;
-
-    player.y += player.speed;
+  if (keys.ArrowDown) {
+    const isCol = checkCollision(player, collisionObjects,'down');
+    if (!isCol) background.position.y = background.position.y - player.speed;
     imageChange(prontPlayerImage);
-  } else if (keys.ArrowDown && player.y + player.height >= canvas.height && background.position.y > -1020) {
-    
-    imageChange(prontPlayerImage);
-    background.position.y = background.position.y - player.speed;
-  }
-
-  // 오른쪽
-  if (keys.ArrowRight && player.x + player.width < canvas.width && background.position.x > -1920 && background.position.x <= 100) {
-  
-    if (background.position.x >= 0) background.position.x -= 10;
-
-    player.x += player.speed;
-    imageChange(rightPlayerImage);
-  } else if (keys.ArrowRight && player.x + player.width >= canvas.width && background.position.x > -1920) {
-
-    imageChange(rightPlayerImage);
-    background.position.x = background.position.x - player.speed;
-  }
-
-  // 왼쪽
-  if (keys.ArrowLeft && player.x > 0 && background.position.x < 0) {
-
-    if (background.position.x <= -1920) background.position.x += 10;
-    
-    player.x -= player.speed;
-    imageChange(leftPlayerImage);
-  } else if (keys.ArrowLeft && player.x <= 0 && background.position.x < 0) {
-
-    imageChange(leftPlayerImage);
-    background.position.x = background.position.x + player.speed;
   }
 
   if (imageChangeDelay > 0) {
     imageChangeDelay--;
+  } 
+  
+  if (checkCollision(player, collisionObjects)) {
+    console.log("충돌");
   }
-
-  // 충돌 감지
-  if (checkCollision(player, enemy)) {
-    gameOver();
-    return;
-  }
-
+  
   // 게임 루프 반복
   requestAnimationFrame(gameLoop);
 }
 
+
 // 충돌 감지 함수
-function checkCollision(obj1, obj2) {
-  return (
-    obj1.x < obj2.x + obj2.width &&
-    obj1.x + obj1.width > obj2.x &&
-    obj1.y < obj2.y + obj2.height &&
-    obj1.y + obj1.height > obj2.y
-  );
+function checkCollision(player, obstacles , arrow) {
+  for (let obj of obstacles) {
+    let objX = obj.x * 3 + background.position.x;
+    let objY = obj.y * 3 + background.position.y;
+    switch(arrow){
+      case "left" : objX += player.speed; break;
+      case "right" : objX -= player.speed; break;
+      case "up" : objY += player.speed; break;
+      case "down" : objY -= player.speed; break;
+    }
+    if (
+      player.x < objX + obj.width * 3 &&
+      player.x + player.width > objX &&
+      player.y < objY + obj.height * 3 &&
+      player.y + player.height > objY
+    ) {
+      return true; // 충돌이 발생했음을 반환
+    }
+  }
+  return false; // 충돌이 발생하지 않음을 반환
 }
+
+
 
 // 게임 오버 처리
 function gameOver() {
@@ -177,6 +166,10 @@ function gameOver() {
 const keys = {};
 
 window.addEventListener("keydown", (event) => {
+  const arrowKeys = [37, 38, 39, 40];
+  if (arrowKeys.includes(event.keyCode)) {
+    event.preventDefault();
+  }
   keys[event.key] = true;
 });
 
@@ -192,7 +185,5 @@ function imageChange(playerImageArray) {
   }
 }
 
-
-// 게임 시작
-gameLoop();
-
+// 게임시작
+// gameLoop();
