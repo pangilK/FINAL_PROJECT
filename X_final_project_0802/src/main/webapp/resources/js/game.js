@@ -1,11 +1,10 @@
-
 const systemText = document.querySelector("#systemText");
 const gameBox = document.querySelector("#gameBox");
 const gameBtn = document.querySelector("#gameBtn");
 const subGameBox = document.querySelector("#subGameBox");
 const systemZoomText = document.querySelector("#systemZoomText");
 const systemZoomTextBox = document.querySelector("#systemZoomTextBox");
-
+const endBox = document.querySelector("#endBox");
 let idx = 0;
 let context;
 // scene을 구분하는것 ex : 'scene'+scene = scene1; default = 1
@@ -15,8 +14,6 @@ let selNum = 0;
 // action중 ALL -> 다보고 넘어가기 위한 변수
 let optionCount = 0;
 let sceneOptionCount = 0;
-// 위랑 같은데 이건 ALLGAME에서 사용할 변수
-let subGameCount = 0;
 // enter로 특정함수를 실행할수있게할 변수 start.js에 25번째줄 부터 보면됨
 let sys_isEnter = true;
 let isSys = true;
@@ -36,7 +33,6 @@ function displayText(sceneObject) {
 		createOptions(sceneObject);
 		return;
 	}
-	// 31번째줄 확인 -> introText의 한줄
 	let line = textArray[idx]; 
 	// 시스템대사인지 캐릭터대사인지 확인할 변수
 	let isCheck = false;
@@ -74,7 +70,7 @@ function displayText(sceneObject) {
 
 			i++;
 			scrollToBottom(systemText);
-			setTimeout(typing2, 10); // 한 글자 출력 간격을 50ms로 설정 (조절 가능) 빨리 보기위해 10으로 해놈
+			setTimeout(typing2, 20); // 한 글자 출력 간격을 50ms로 설정 (조절 가능) 빨리 보기위해 10으로 해놈
 		} else {
 			sys_isEnter = true;
 			idx++;
@@ -86,15 +82,12 @@ function displayText(sceneObject) {
 
 
 function createOptions(sceneObject) {
-	// document.querySelector("#char_Nick").innerHTML = "";
-	// option , action , sound
 	clean();
 	const option = sceneObject.options;
 	const action = sceneObject.action;
 	const sound = sceneObject.sound;
 
 	if (!option || option.length === 0) {
-		// 옵션이 없는 경우, 선택지를 생성하지 않음
 		return;
 	}
 
@@ -104,13 +97,12 @@ function createOptions(sceneObject) {
 	
 	sys_isEnter = false;
 	// SELECT = 여러개의 옵션중 하나만 고르고 다음 씬으로 넘김
-	if (action == "SELECT") {
+	if (action == ("SELECT" || "END" )) {
 		option.forEach((optionObj, index) => {
 			const optionButton = document.createElement("button");
 			optionButton.textContent = optionObj.buttonText;
 			// 옵션 버튼들 클릭했을때 이벤트
 			optionButton.onclick = (e) => {
-				const btns = document.querySelectorAll("button");
 				document.querySelector("#btnDiv").remove();
 				selNum = index;
 				createAction(sceneObject);
@@ -127,7 +119,6 @@ function createOptions(sceneObject) {
 			optionButton.textContent = optionObj.buttonText;
 
 			optionButton.onclick = (e) => {
-				const btns = document.querySelectorAll("button");
 				e.target.remove();
 				document.querySelector("#btnDiv").style.display = "none";
 				selNum = index;
@@ -145,7 +136,6 @@ function createOptions(sceneObject) {
 			optionButton.textContent = optionObj.buttonText;
 			// 옵션 버튼들 클릭했을때 이벤트
 			optionButton.onclick = (e) => {
-				const btns = document.querySelectorAll("button");
 				document.querySelector("#btnDiv").remove();
 				selNum = index;
 				createAction(sceneObject);
@@ -153,23 +143,6 @@ function createOptions(sceneObject) {
 			scrollToBottom(systemText);
 			optionButtonWrapper.appendChild(optionButton);
 		});
-	}
-	// ALLGAME = 옵션에 있는 게임 모두를 클리어해야지만 다음 씬으로 넘김.
-	if (action == 'ALLGAME') {
-		option.forEach((optionObj,index) => {
-			const optionButton = document.createElement("button");
-			optionButton.textContent = optionObj.buttonText;
-
-			optionButton.onclick = (e) => {
-				const btns = document.querySelectorAll("button");
-				e.target.remove();
-				document.querySelector("#btnDiv").style.display = "none";
-				selNum = index;
-				createAction(sceneObject);
-			};
-			scrollToBottom(systemText);
-			optionButtonWrapper.appendChild(optionButton);
-		})
 	}
 }
 
@@ -182,7 +155,7 @@ function createAction(sceneObject) {
 	const col = sceneObject.options[selNum].color;
 
 	let gameType = "";
-	if(action == 'GAME' || action == 'ALLGAME'){
+	if(action == 'GAME'){
 		gameType = sceneObject.options[selNum].gameType;
 	}
 	sys_isEnter = false;
@@ -224,9 +197,8 @@ function createAction(sceneObject) {
 				createGame(gameType);
 				break;
 
-			case 'ALLGAME' :
-				subGameCount++;
-				createGame(gameType);
+			case 'END' :
+				gameEnd();
 				break;
 		}
 	} else {
@@ -284,6 +256,32 @@ function playSound(sound) {
 	audio.play();
 }
 
+function lineCheck(line) {
+	if(line.startsWith("마이크:") || line.startsWith("레베카:") || line.startsWith("카렌:") || 
+	   line.startsWith("빅토르:") || line.startsWith("에밀리:")){
+		changeImage(line);
+		return true;
+	}
+	return false;
+}
+
+function changeImage(line){
+	const profile = document.querySelector("#char_Image");
+	profile.style.backgroundSize = "cover";
+	
+	if (line.startsWith("마이크:")) {
+        profile.style.backgroundImage = "url('/resources/img/mike.png')";
+    } else if (line.startsWith("레베카:")) {
+        profile.style.backgroundImage = "url('/resources/img/rebecca.png')";
+    } else if (line.startsWith("빅토르:")) {
+        profile.style.backgroundImage = "url('/resources/img/victor.png')";
+    } else if (line.startsWith("카렌:")) {
+        profile.style.backgroundImage = "url('/resources/img/caren.png')";
+    } else if (line.startsWith("에밀리:")) {
+        profile.style.backgroundImage = "url('/resources/img/emily.png')";
+    }
+}
+
 // ajax 통신으로 jsp파일 불러와서 subGameBox 안에 생성
 function createGame(subGame) {
 	loadingStart();
@@ -332,39 +330,26 @@ function findEnding() {
 
 // subGame중 단서 다 찾은 후 조합 
 function provisoEnding() {
-	subGameBox.style.dispaly = "none";
 	document.querySelector("#docBtn").style.display = 'none';
 	document.querySelector("#letterBtn").style.display = 'none';
 	document.querySelector("#sub_game").remove();
+	subGameBox.style.dispaly = "none";
 	gameBox.style.display = "block";
 	scene++;
 	const sceneObject = window["scene"+scene];
 	displayText(sceneObject);
 }
 
-
-function lineCheck(line) {
-	if(line.startsWith("마이크:") || line.startsWith("레베카:") || line.startsWith("카렌:") || 
-	   line.startsWith("빅토르:") || line.startsWith("에밀리:")){
-		changeImage(line);
-		return true;
-	}
-	return false;
+function runWigoAndEmilyEnd() {
+	document.querySelector("#sub_game").remove();
+	subGameBox.style.display = "none";
+	gameBox.style.display = "block";
+	scene++;
+	const sceneObject = window["scene"+scene];
+	displayText(sceneObject);
 }
 
-function changeImage(line){
-	const profile = document.querySelector("#char_Image");
-	profile.style.backgroundSize = "cover";
-	
-	if (line.startsWith("마이크:")) {
-        profile.style.backgroundImage = "url('/resources/img/mike.png')";
-    } else if (line.startsWith("레베카:")) {
-        profile.style.backgroundImage = "url('/resources/img/rebecca.png')";
-    } else if (line.startsWith("빅토르:")) {
-        profile.style.backgroundImage = "url('/resources/img/alex.png')";
-    } else if (line.startsWith("카렌:")) {
-        profile.style.backgroundImage = "url('/resources/img/caren.png')";
-    } else if (line.startsWith("에밀리:")) {
-        profile.style.backgroundImage = "url('/resources/img/emily.png')";
-    }
+function gameEnd() {
+	gameBox.style.display = 'none';
+	endBox.style.display = 'block';
 }
