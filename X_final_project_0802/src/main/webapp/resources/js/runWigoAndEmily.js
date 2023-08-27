@@ -1,11 +1,15 @@
-// const canvas = document.getElementById("gameCanvas");
-// const context = canvas.getContext("2d");
-const canvasWidth = 960; // 캔버스 너비
-const canvasHeight = 512; // 캔버스 높이
+const canvasWidth = 960; 
+const canvasHeight = 512; 
+let map = 'lobby';
+let isEnd = false;
 
+const bgImg = new Image();
+bgImg.src = "/resources/map/lobby.png";
+const bgImg2 = new Image();
+bgImg2.src = "/resources/map/outside.png";
 
 class Sprite {
-  constructor({ position, velocity, image }) {
+  constructor({ position, image }) {
     this.position = position;
     this.image = image;
   }
@@ -14,6 +18,24 @@ class Sprite {
     context.drawImage(this.image, this.position.x, this.position.y);
   }
 }
+
+const lobby = new Sprite({
+  position: {
+    x: 90,
+    y: -120
+  },
+  image: bgImg
+});
+
+const outside = new Sprite({
+  position: {
+    x : -885,
+    y : 125
+  },
+  image: bgImg2
+});
+
+
 const rightPlayerImage = [
   "/resources/img/game/myke/right0.png",
   "/resources/img/game/myke/right1.png",
@@ -46,42 +68,41 @@ const backPlayerImage = [
   "/resources/img/game/myke/back4.png"
 ]
 
-const collisionObjects = collisionData.objects.map((obj) => ({
+const colLobby = collisionData.objects.map((obj) => ({
+  id: obj.id,
   x: obj.x,
   y: obj.y,
   width: obj.width,
   height: obj.height,
 }));
 
-
-const bgImg = new Image();
-bgImg.src = "/resources/map/testBack.png";
+const colOutside = collisionData2.objects.map((obj) => ({
+  id: obj.id,
+  x: obj.x,
+  y: obj.y,
+  width: obj.width,
+  height: obj.height,
+}));
 
 const playerImage = new Image();
 playerImage.src = "/resources/img/game/myke/pront0.png";
 
-const background = new Sprite({
-  position: {
-    x: 90,
-    y: -120
-  },
-  image: bgImg
-});
-
 let playerImageIndex = 0;
 let imageChangeDelay = 0;
 
-const enemyImage = new Image();
-enemyImage.src = "/resources/img/alex.png";
-const player = { x: canvasWidth/2, y: canvasHeight/2, speed: 10, width: 48, height: 48 };
-let enemy = { x: 3000, y: 120, speed: 15, width: 40, height: 40 };
-
+const player = { x: canvasWidth/2, y: canvasHeight/2, speed: 5, width: 48, height: 48 };
 
 function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   
   // 배경 그리기
-  background.draw();
+  if(map == 'lobby') {
+    lobby.draw();
+  }
+
+  if(map == 'outside'){
+    outside.draw();
+  }
 
   // 플레이어 그리기
   context.drawImage(playerImage , player.x , player.y , player.width , player.height);
@@ -90,29 +111,33 @@ function gameLoop() {
   
   // 오른쪽
   if (keys.ArrowRight) {
-    const isCol = checkCollision(player, collisionObjects,'right');
-    if (!isCol) background.position.x = background.position.x - player.speed;
+    const isCol = checkCollision(player, 'right');
+    if (!isCol && map == 'lobby') lobby.position.x = lobby.position.x - player.speed;
+    if (!isCol && map == 'outside' ) outside.position.x = outside.position.x - player.speed;
     imageChange(rightPlayerImage);
   }
   
   // 왼쪽
   if (keys.ArrowLeft) {
-    const isCol = checkCollision(player, collisionObjects,'left');
-    if (!isCol) background.position.x = background.position.x + player.speed;
+    const isCol = checkCollision(player, 'left');
+    if (!isCol && map == 'lobby') lobby.position.x = lobby.position.x + player.speed;
+    if (!isCol && map == 'outside' ) outside.position.x = outside.position.x + player.speed;
     imageChange(leftPlayerImage);
   }
 
   // 위
   if (keys.ArrowUp) {
-    const isCol = checkCollision(player, collisionObjects,'up');
-    if (!isCol) background.position.y = background.position.y + player.speed;
+    const isCol = checkCollision(player, 'up');
+    if (!isCol && map == 'lobby') lobby.position.y = lobby.position.y + player.speed;
+    if (!isCol && map == 'outside' ) outside.position.y = outside.position.y + player.speed;
     imageChange(backPlayerImage);
   }
 
   // 아래
   if (keys.ArrowDown) {
-    const isCol = checkCollision(player, collisionObjects,'down');
-    if (!isCol) background.position.y = background.position.y - player.speed;
+    const isCol = checkCollision(player, 'down');
+    if (!isCol && map == 'lobby') lobby.position.y = lobby.position.y - player.speed;
+    if (!isCol && map == 'outside' ) outside.position.y = outside.position.y - player.speed;
     imageChange(prontPlayerImage);
   }
 
@@ -120,20 +145,23 @@ function gameLoop() {
     imageChangeDelay--;
   } 
   
-  if (checkCollision(player, collisionObjects)) {
-    console.log("충돌");
-  }
-  
   // 게임 루프 반복
+  if(isEnd){
+  	runWigoAndEmilyEnd();
+  	return;
+  }
   requestAnimationFrame(gameLoop);
 }
 
 
 // 충돌 감지 함수
-function checkCollision(player, obstacles , arrow) {
+function checkCollision(player,arrow) {
+  const obstacles = (map == 'lobby') ? colLobby : colOutside;
+  const bgX = (map == 'lobby') ? lobby.position.x : outside.position.x;
+  const bgY = (map == 'lobby') ? lobby.position.y : outside.position.y;
   for (let obj of obstacles) {
-    let objX = obj.x * 3 + background.position.x;
-    let objY = obj.y * 3 + background.position.y;
+    let objX = obj.x * 3 + bgX;
+    let objY = obj.y * 3 + bgY;
     switch(arrow){
       case "left" : objX += player.speed; break;
       case "right" : objX -= player.speed; break;
@@ -146,6 +174,17 @@ function checkCollision(player, obstacles , arrow) {
       player.y < objY + obj.height * 3 &&
       player.y + player.height > objY
     ) {
+      if(obj.id == 104 && map == 'lobby'){ 
+        map = 'outside';
+      }
+      if(obj.id == 30 && map == 'outside'){
+        map = 'lobby';
+        lobby.position.x = -960;
+        lobby.position.y = -1175;
+      }
+      if(obj.id == 11 && map == 'outside'){
+        isEnd = true;
+      }
       return true; // 충돌이 발생했음을 반환
     }
   }
@@ -183,7 +222,4 @@ function imageChange(playerImageArray) {
       playerImageIndex = (playerImageIndex + 1) % playerImageArray.length;
       playerImage.src = playerImageArray[playerImageIndex];
   }
-}
-
-// 게임시작
-// gameLoop();
+};
