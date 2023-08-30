@@ -191,16 +191,6 @@ function checkCollision(player,arrow) {
   return false; // 충돌이 발생하지 않음을 반환
 }
 
-
-
-// 게임 오버 처리
-function gameOver() {
-  // 일단 임시용
-  context.font = "30px Arial";
-  context.fillStyle = "black";
-  context.fillText("Game Over", canvas.width / 2 - 70, canvas.height / 2);
-}
-
 // 키 입력 상태 저장
 const keys = {};
 
