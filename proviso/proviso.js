@@ -95,7 +95,7 @@ function closeProviso() {
 // flashLight --------------------------------------------------------
 function flashlightStart() {
     document.querySelector("#itemBox").style.display = 'none';
-	document.querySelector("#lampAndPaper").style.display = 'none';
+    document.querySelector("#lampAndPaper").style.display = 'none';
     document.querySelector("#provisoBox").style.display = 'none';
     document.querySelector("#flashLightBox").style.display = 'block';
     flashlight();
@@ -125,9 +125,7 @@ function flashlight(){
     
     function getMousePosition(e) {
        mouseX = !isTouchDevice() ? e.pageX : e.touches[0].pageX;
-  	   mouseY = !isTouchDevice() ? e.pageY : e.touches[0].pageY;
-       console.log(mouseX);
-       console.log(mouseY);
+       mouseY = !isTouchDevice() ? e.pageY : e.touches[0].pageY;
        flashlight.style.setProperty("--Xpos", mouseX-270 + "px");
        flashlight.style.setProperty("--Ypos", mouseY-100 + "px");
     }	
